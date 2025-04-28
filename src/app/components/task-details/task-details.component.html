@@ -1,0 +1,124 @@
+<div class="container mt-4" *ngIf="taskDetails">
+  <div class="row">
+    <!-- Main task details and map -->
+    <div class="col-md-8">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h2 class="h4 mb-0">Task Details</h2>
+        </div>
+        <div class="card-body p-4">
+          <table class="table">
+            <tbody>
+            <tr><th>Description</th><td>{{ taskDetails.description }}</td></tr>
+            <tr><th>Status</th><td>
+                <span class="badge" [ngClass]="{
+                  'bg-primary': taskDetails.status === 'OPEN',
+                  'bg-warning text-dark': taskDetails.status === 'IN_PROGRESS',
+                  'bg-success': taskDetails.status === 'DONE'
+                }">{{ taskDetails.status }}</span>
+            </td></tr>
+            <tr><th>Task Type</th><td>{{ taskDetails.taskType }}</td></tr>
+            <tr><th>Assignee</th><td>{{ taskDetails.assignee }}</td></tr>
+            <tr><th>Address</th><td>{{ taskDetails.address }}</td></tr>
+            <tr><th>Postcode</th><td>{{ taskDetails.postcode }}</td></tr>
+            <tr><th>UPRN</th><td>{{ taskDetails.uprn }}</td></tr>
+            </tbody>
+          </table>
+
+          <!-- Map -->
+          <div *ngIf="showMap && mapUrl" class="mt-4">
+            <h5>Location</h5>
+            <iframe
+              width="100%"
+              height="300"
+              frameborder="0"
+              style="border: 1px solid #ccc; border-radius: 6px;"
+              [src]="mapUrl | safeUrl"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Back Button -->
+      <a routerLink="/" class="btn btn-secondary">Back</a>
+    </div>
+
+    <!-- Side panel: Assign User and Provision -->
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">Assign User</h5>
+        </div>
+        <div class="card-body">
+          <input
+            type="text"
+            class="form-control mb-3"
+            [(ngModel)]="userSearch"
+            placeholder="Search user..."
+          />
+
+          <ul class="list-group mb-3" *ngIf="userSearch">
+            <li
+              class="list-group-item list-group-item-action"
+              *ngFor="let user of filteredUsers()"
+              (click)="selectUser(user)">
+              {{ user.name }}
+            </li>
+          </ul>
+
+          <div class="d-flex gap-2">
+            <button (click)="confirmAssign()" [disabled]="!selectedUser" class="btn btn-primary">Re-Assign</button>
+            <button (click)="unassignUser()" class="btn btn-danger">Unassign</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activate Button -->
+      <div *ngIf="taskDetails.taskType === 'IN_HOME_INSTALL'">
+        <button
+          class="btn w-100 mb-3"
+          [ngClass]="isActivated ? 'btn-success' : 'btn-primary'"
+          [disabled]="isActivated"
+          (click)="onShowProvisionForm()">
+          {{ isActivated ? 'Activated' : 'Activate' }}
+        </button>
+      </div>
+
+      <!-- Provision Form -->
+      <div *ngIf="showProvisionForm" class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Provision Task</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="serial" class="form-label">ONT Serial Number</label>
+            <input id="serial" class="form-control" [(ngModel)]="serialNumber" placeholder="ALCLFB2143546" />
+          </div>
+
+          <div class="mb-3">
+            <label for="port" class="form-label">Port</label>
+            <input id="port" class="form-control" [(ngModel)]="port" placeholder="Port (e.g. 1-1-1-1)" />
+          </div>
+
+          <div class="mb-3">
+            <label for="package" class="form-label">Package</label>
+            <select id="package" class="form-select" [(ngModel)]="packageName">
+              <option *ngFor="let pkg of predefinedPackages" [value]="pkg">{{ pkg }}</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="oltName" class="form-label">OLT Name</label>
+            <input id="oltName" class="form-control" [(ngModel)]="taskDetails.oltName" disabled />
+          </div>
+
+          <div class="d-flex gap-2">
+            <button (click)="provisionTask()" class="btn btn-success">Provision</button>
+            <button (click)="showProvisionForm = false" class="btn btn-outline-secondary">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+    </div> <!-- col-md-4 end -->
+  </div>
+</div>

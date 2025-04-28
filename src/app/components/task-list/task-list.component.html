@@ -1,0 +1,74 @@
+<div class="container-fluid mt-4">
+  <div class="row">
+
+    <div class="col-md-3">
+      <h4>Task Status</h4>
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center" (click)="filterByStatus()">
+          All
+          <span class="badge bg-primary rounded-pill">{{ totalTasks || 0 }}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center" (click)="filterByStatus('OPEN')">
+          Open
+          <span class="badge bg-primary rounded-pill">{{ statusSummary['OPEN'] || 0 }}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center" (click)="filterByStatus('IN_PROGRESS')">
+          In Progress
+          <span class="badge bg-warning text-dark rounded-pill">{{ statusSummary['IN_PROGRESS'] || 0 }}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center" (click)="filterByStatus('DONE')">
+          Done
+          <span class="badge bg-success rounded-pill">{{ statusSummary['DONE'] || 0 }}</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-md-9">
+      <h2>Task List</h2>
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+        <tr>
+          <th>ID</th>
+          <th>Description</th>
+          <th>Location</th>
+          <th>Assignee</th>
+          <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let task of tasks">
+          <td>{{ task.id }}</td>
+          <td>
+              <span (click)="goToTaskDetails(task.id)" class="clickable-task">
+                {{ task.description }}
+              </span>
+          </td>
+          <td>{{ task.location ? task.location.address : 'n/a' }}</td>
+          <td>{{ task.assignedUser ? task.assignedUser.name : 'Unassigned' }}</td>
+          <td>
+            <div *ngIf="!task.editingStatus" (click)="task.editingStatus = true" class="clickable-status">
+    <span class="badge"
+          [ngClass]="{
+            'bg-primary': task.status === 'OPEN',
+            'bg-warning text-dark': task.status === 'IN_PROGRESS',
+            'bg-success': task.status === 'DONE'
+          }">
+      {{ task.status }}
+    </span>
+            </div>
+
+            <div *ngIf="task.editingStatus" class="edit-status-form">
+              <select [(ngModel)]="task.newStatus">
+                <option *ngFor="let status of allStatuses" [value]="status">{{ status }}</option>
+              </select>
+              <button (click)="saveStatus(task)" class="btn btn-sm btn-success ms-2">Save</button>
+              <button (click)="cancelStatusEdit(task)" class="btn btn-sm btn-secondary ms-2">Cancel</button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

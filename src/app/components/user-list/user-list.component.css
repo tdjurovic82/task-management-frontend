@@ -1,0 +1,65 @@
+.wrapper {
+  padding: 0 20px;
+}
+
+h1 {
+  font-family: sans-serif;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-family: sans-serif;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+a {
+  display: block;
+  margin: 20px 0;
+  /*font-size: 18px;*/
+  /*font-weight: bold;*/
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+  font-family: sans-serif;
+}
+.btn-activate {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn-activate:hover {
+  background-color: #0056b3;
+}
+
+.btn-activated {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: not-allowed;
+}
+
