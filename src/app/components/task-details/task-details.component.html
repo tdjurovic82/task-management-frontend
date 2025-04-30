@@ -67,8 +67,8 @@
           </ul>
 
           <div class="d-flex gap-2">
-            <button (click)="confirmAssign()" [disabled]="!selectedUser" class="btn btn-primary">Re-Assign</button>
-            <button (click)="unassignUser()" class="btn btn-danger">Unassign</button>
+            <button (click)="confirmAssign()" [disabled]="!selectedUser" class="btn btn-primary">{{ taskDetails.assignee !== 'Unassigned' ? 'Re-assign' : 'Assign' }}</button>
+            <button (click)="unassignUser()"  [disabled]="taskDetails.assignee === 'Unassigned'" class="btn btn-danger">Unassign</button>
           </div>
         </div>
       </div>
